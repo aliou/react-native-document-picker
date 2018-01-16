@@ -101,15 +101,17 @@ RCT_EXPORT_METHOD(show:(NSDictionary *)options
 
             NSError *attributesError = nil;
             NSDictionary *fileAttributes = [[NSFileManager defaultManager] attributesOfItemAtPath:newURL.path error:&attributesError];
-            if(!attributesError) {
-                NSData *data = [[NSFileManager defaultManager] contentsAtPath: newURL.path];
-                NSString *base64Data = [data encodeBase64ForData];
 
-                [result setValue:[fileAttributes objectForKey:NSFileSize] forKey:@"fileSize"];
-                [result setValue:base64Data forKey:@"data"];
+            if(!attributesError) {
+            [result setValue:[fileAttributes objectForKey:NSFileSize] forKey:@"fileSize"];
             } else {
                 NSLog(@"%@", attributesError);
             }
+
+            NSData *data = [[NSFileManager defaultManager] contentsAtPath: newURL.path];
+            NSString *base64Data = [data encodeBase64ForData];
+
+            [result setValue:base64Data forKey:@"data"];
 
             callback(@[[NSNull null], result]);
         }];
